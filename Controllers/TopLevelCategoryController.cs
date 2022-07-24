@@ -2,30 +2,27 @@
 using Nostalginc.Data;
 using Nostalginc.Data.Repos;
 using Nostalginc.Models;
+using Nostalginc.Services.Interfaces;
 
 namespace Nostalginc.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("home")]
     public class TopLevelCategoryController : ControllerBase
     {
         private readonly ILogger<TopLevelCategoryController> logger;
-        private readonly CategoriesRepo _categoriesRepo;
-
-        public TopLevelCategoryController(ILogger<TopLevelCategoryController> logger, NostalgincContext dbContext,
-            CategoriesRepo categoriesRepo)
+        private readonly IHomepageService _service;
+        public TopLevelCategoryController(ILogger<TopLevelCategoryController> logger, IHomepageService service)
         {
-            _categoriesRepo = categoriesRepo;
+            _service = service;
             this.logger = logger;
-            _dbContext = dbContext;
         }
 
-        private NostalgincContext _dbContext { get; }
 
         [HttpGet]
-        public IEnumerable<TopLevelCategories> Get()
+        public Task<ActionResult> Get()
         {
-            return _dbContext.TopLevelCategories.ToList();
+            var responseModel = await _service.
         }
 
         [HttpPost]

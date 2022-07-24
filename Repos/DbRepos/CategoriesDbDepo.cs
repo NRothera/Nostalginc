@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nostalginc.Controllers;
 using Nostalginc.Models;
+using Nostalginc.Repos.Interfaces;
 
 namespace Nostalginc.Data.Repos
 {
-    public class CategoriesRepo
+    public class CategoriesDbRepo
     {
         private readonly ILogger<CategoriesRepo> logger;
         private readonly NostalgincContext dbContext;
 
-        public CategoriesRepo(ILogger<CategoriesRepo> logger, NostalgincContext dbContext)
+        public CategoriesDbRepo(ILogger<CategoriesRepo> logger, NostalgincContext dbContext)
         {
             this.logger = logger;
             this.dbContext = dbContext;
@@ -30,6 +31,21 @@ namespace Nostalginc.Data.Repos
             {
                 logger.LogError($"Failed to save changed: {e}");
             }
+        }
+
+        public List<TopLevelCategories> GetTopLevelCategoriesList()
+        {
+            var allCategories = new List<TopLevelCategories>();
+            try
+            {
+                allCategories = dbContext.TopLevelCategories.ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return allCategories;
         }
     }
 }
